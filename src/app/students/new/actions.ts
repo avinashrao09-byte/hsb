@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { getServerClient } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/server";
 import { getRoleProfile } from "@/lib/roleLibrary";
 import { computeTier, coachabilityFromSoft } from "@/lib/tiering";
 import type { CompetencyScore, Level, Role } from "@/lib/types";
@@ -12,8 +12,7 @@ function lvl(v: FormDataEntryValue | null): Level {
 }
 
 export async function enrollStudent(formData: FormData) {
-  const supabase = getServerClient();
-  if (!supabase) throw new Error("Supabase is not configured. See README.");
+  const supabase = createClient();
 
   const fullName = String(formData.get("full_name") ?? "").trim();
   const role = String(formData.get("role")) as Role;

@@ -67,12 +67,23 @@ git push -u origin main
 
 ---
 
-## Security notes (before real student PII)
-- This scaffold leaves **Row Level Security permissive** for speed. Turn on RLS and add
-  auth (Supabase Auth) before entering real names/emails.
-- `audit_log` is append-only (a trigger blocks updates/deletes).
-- `SUPABASE_SERVICE_ROLE_KEY` must never be exposed to the browser — it is only read by
-  `scripts/seed.ts`.
+## Auth & security
+
+The app is **gated behind Supabase Auth** — every route redirects to `/login` unless signed in —
+and **Row Level Security** closes anonymous access to the database.
+
+Setup:
+1. Run `supabase/migrations/0002_rls.sql` in the SQL editor (enables RLS + authenticated-only policies).
+2. In Supabase → **Authentication → Providers → Email**, keep Email enabled and **turn OFF
+   "Allow new users to sign up"** (accounts are provisioned by the admin, not self-serve).
+3. In **Authentication → Users → Add user**, create each mentor/admin account (email + password).
+4. Sign in at `/login`.
+
+Notes:
+- v1 policy model: any authenticated staff user has full access (a small-team mentoring tool).
+  Per-mentor scoping can be layered on later without schema changes.
+- `audit_log` is append-only (a trigger blocks updates/deletes; RLS allows insert + read only).
+- `SUPABASE_SERVICE_ROLE_KEY` must never reach the browser — it is only read by `scripts/seed.ts`.
 
 ## Project map
 ```

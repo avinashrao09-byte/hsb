@@ -1,19 +1,28 @@
+import Link from "next/link";
 import IntakeForm from "./IntakeForm";
-import { isConfigured } from "@/lib/supabase";
+import { isConfigured } from "@/lib/supabase/server";
 
 export default function NewStudentPage() {
   return (
-    <div>
+    <div className="mx-auto max-w-3xl">
       <div className="mb-6">
-        <h1 className="font-display text-2xl font-semibold text-hsb-navy">Enroll a student</h1>
-        <p className="text-sm text-gray-500">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1 text-sm text-slate-500 transition hover:text-hsb-blue"
+        >
+          <span aria-hidden>←</span> Back to batch
+        </Link>
+        <h1 className="mt-3 font-display text-[26px] font-semibold tracking-tight text-hsb-navy">
+          Enroll a student
+        </h1>
+        <p className="mt-1 text-sm text-slate-500">
           Intake → self-assessment → resume/LinkedIn state → soft-readiness → diagnosis → tier.
         </p>
       </div>
       {!isConfigured() ? (
-        <div className="mb-6 rounded-md border border-hsb-soft bg-hsb-tint px-4 py-3 text-sm text-hsb-navy">
+        <div className="mb-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
           Supabase isn&apos;t connected yet — submitting will fail until you set{" "}
-          <code>.env.local</code>. See the README.
+          <code className="rounded bg-white px-1">.env.local</code>. See the README.
         </div>
       ) : null}
       <IntakeForm />

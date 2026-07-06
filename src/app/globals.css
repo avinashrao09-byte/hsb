@@ -3,19 +3,36 @@
 @tailwind utilities;
 
 :root {
-  --hsb-navy: #1d3c74;
-  --hsb-blue: #1955a6;
-  --hsb-green: #61ce70;
+  color-scheme: light;
 }
 
 html,
 body {
   padding: 0;
   margin: 0;
-  background: #f7f9fc;
-  color: #33373d;
+}
+
+body {
+  background: #f8fafc; /* slate-50 */
+  color: #1e293b; /* slate-800 */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 * {
   box-sizing: border-box;
+}
+
+::selection {
+  background: rgba(25, 85, 166, 0.16);
+}
+
+/* Tidy native selects to match the design language */
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.6rem center;
+  padding-right: 2rem;
 }
