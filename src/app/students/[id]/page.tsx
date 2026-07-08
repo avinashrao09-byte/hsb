@@ -90,7 +90,7 @@ export default async function StudentPage({ params }: { params: { id: string } }
   return (
     <div className="space-y-6">
       <Link href="/board" className="inline-flex items-center gap-1 text-sm text-slate-500 transition hover:text-hsb-blue">
-        <span aria-hidden>←</span> Back to board
+        <span aria-hidden>←</span> Back to dashboard
       </Link>
 
       {/* Header */}

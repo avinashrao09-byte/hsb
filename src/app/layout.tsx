@@ -48,8 +48,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
             {email ? (
               <nav className="flex items-center gap-1">
-                <NavLink href="/">Dashboard</NavLink>
-                <NavLink href="/board">Board</NavLink>
+                <NavLink href="/">Overview</NavLink>
+                <NavLink href="/board">Dashboard</NavLink>
                 <NavLink href="/dean">Dean</NavLink>
                 <Link
                   href="/students/new"

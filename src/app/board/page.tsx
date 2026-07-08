@@ -27,7 +27,7 @@ export default async function BoardPage() {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-display text-[26px] font-semibold tracking-tight text-hsb-navy">
-            Cohort board
+            Dashboard
           </h1>
           <p className="mt-1 text-sm text-slate-500">
             {cohort.length} student{cohort.length === 1 ? "" : "s"} · sorted by readiness tier
