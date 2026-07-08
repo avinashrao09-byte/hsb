@@ -64,12 +64,9 @@ export default async function DeanPage() {
 
       {/* Intake vs now */}
       <div className="rounded-md border border-slate-200 bg-white p-6">
-        <h2 className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+        <h2 className="mb-5 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
           RAG distribution — intake vs now
         </h2>
-        <p className="mb-5 text-xs text-slate-400">
-          The gap between the two bars is the program working.
-        </p>
         <div className="space-y-5">
           <DistRow label="At intake" counts={intake} total={total} />
           <DistRow label="Now" counts={now} total={total} />
