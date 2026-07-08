@@ -146,6 +146,26 @@ export async function reDiagnose(formData: FormData) {
     }))
   );
 
+  // First diagnosis: generate the plan (prescriptions) if the student has none yet.
+  const { count: rxCount } = await supabase
+    .from("prescription")
+    .select("id", { count: "exact", head: true })
+    .eq("student_id", id);
+  if (!rxCount) {
+    const below = profile.competencies
+      .filter((c) => (scores.find((s) => s.competencyCode === c.code)?.level ?? 0) < c.target)
+      .sort((a, b) => Number(b.isSignature) - Number(a.isSignature));
+    const rx = below.flatMap((c) => {
+      const items: { student_id: string; competency_code: string; kind: string; detail: string }[] = [];
+      if (c.remediation.project)
+        items.push({ student_id: id, competency_code: c.code, kind: "project", detail: c.remediation.project });
+      if (c.remediation.reading)
+        items.push({ student_id: id, competency_code: c.code, kind: "reading", detail: c.remediation.reading });
+      return items;
+    });
+    if (rx.length) await supabase.from("prescription").insert(rx);
+  }
+
   await supabase.from("soft_assessment").insert({
     student_id: id,
     source_label: str(formData.get("soft_source")) || "Re-diagnosis",

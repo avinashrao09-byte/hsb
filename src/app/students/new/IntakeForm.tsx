@@ -158,69 +158,17 @@ export default function IntakeForm() {
         </div>
       </Section>
 
-      <Section
-        n={5}
-        title="Soft-readiness"
-        desc="Instrument-agnostic output from any deliverable. Seeds the coachability axis."
-      >
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Source deliverable">
-            <input name="soft_source" className={input} defaultValue="Intake exercise" />
-          </Field>
-          <div className="hidden sm:block" />
-          <Field label="S1 · Instruction fidelity">
-            <LevelSelect name="s1" defaultValue={2} />
-          </Field>
-          <Field label="S2 · AI judgment" hint="U-shape: non-use and blind-use both score low.">
-            <LevelSelect name="s2" defaultValue={2} />
-          </Field>
-          <Field label="S3 · Deliverable quality">
-            <LevelSelect name="s3" defaultValue={2} />
-          </Field>
-          <Field label="Response to critique" hint="If you ran a revision loop.">
-            <LevelSelect name="critique" defaultValue={2} />
-          </Field>
-        </div>
-      </Section>
-
-      <Section
-        n={6}
-        title={`Diagnosis — ${ROLE_LABELS[role]}`}
-        desc="Score each competency 0–3 on evidence from resume, LinkedIn, and the exercise."
-      >
-        <div className="space-y-2">
-          {profile.competencies.map((c) => (
-            <div
-              key={c.code}
-              className="flex items-center justify-between gap-4 rounded-xl border border-slate-100 bg-slate-50/40 px-4 py-3 transition hover:border-slate-200"
-            >
-              <div className="min-w-0">
-                <div className="flex items-center gap-2 text-sm font-medium text-slate-900">
-                  <span className="truncate">{c.name}</span>
-                  {c.isSignature ? (
-                    <span className="shrink-0 rounded-md bg-hsb-tint px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-hsb-blue">
-                      signature
-                    </span>
-                  ) : null}
-                </div>
-                <div className="mt-0.5 text-xs text-slate-400">
-                  target {c.target} · weight {(c.weight * 100).toFixed(0)}% — {c.definition}
-                </div>
-              </div>
-              <div className="shrink-0">
-                <LevelSelect name={`score.${c.code}`} />
-              </div>
-            </div>
-          ))}
-        </div>
-      </Section>
+      <p className="rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-500">
+        Enrolling captures intake facts only — the student lands <span className="font-medium text-slate-700">Not diagnosed</span>.
+        Run the diagnosis (competency scores + soft-readiness) from their profile once they&apos;ve completed the exercise.
+      </p>
 
       <div className="sticky bottom-4 z-10 flex justify-end">
         <button
           type="submit"
           className="inline-flex items-center gap-2 rounded-lg bg-hsb-blue px-6 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:bg-hsb-blue-700 focus:outline-none focus:ring-2 focus:ring-hsb-blue/40"
         >
-          Enroll &amp; diagnose
+          Enroll student
           <span aria-hidden>→</span>
         </button>
       </div>

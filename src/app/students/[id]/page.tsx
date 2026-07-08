@@ -43,6 +43,7 @@ export default async function StudentPage({ params }: { params: { id: string } }
     { data: companies },
     { data: checkins },
     { data: hardConvos },
+    { data: roleDecl },
   ] = await Promise.all([
     supabase.from("readiness_snapshot").select("*").eq("student_id", id).order("snapshot_at", { ascending: true }),
     supabase.from("competency_score").select("*").eq("student_id", id).order("scored_at", { ascending: false }),
@@ -54,11 +55,20 @@ export default async function StudentPage({ params }: { params: { id: string } }
     supabase.from("target_company").select("*").eq("student_id", id).order("priority"),
     supabase.from("check_in").select("*").eq("student_id", id).order("occurred_on", { ascending: false }),
     supabase.from("hard_conversation").select("*").eq("student_id", id).order("occurred_on", { ascending: false }),
+    supabase
+      .from("role_declaration")
+      .select("role")
+      .eq("student_id", id)
+      .eq("is_current", true)
+      .order("declared_at", { ascending: false })
+      .limit(1),
   ]);
 
   const snaps = (snapsAsc ?? []) as any[];
   const snap = snaps[snaps.length - 1];
-  const role = (snap?.role ?? "product") as Role;
+  const declaredRole = (roleDecl ?? [])[0]?.role as Role | undefined;
+  const role = (declaredRole ?? snap?.role ?? "product") as Role;
+  const diagnosed = snaps.length > 0;
   const profile = getRoleProfile(role);
   const softA = (soft ?? [])[0];
   const selfA = (self ?? [])[0];
@@ -119,7 +129,11 @@ export default async function StudentPage({ params }: { params: { id: string } }
               {snap.signature_floor_fired ? <span className="ml-1 text-rag-red">· floor</span> : null}
             </div>
           </div>
-        ) : null}
+        ) : (
+          <span className="inline-flex items-center rounded-full border border-slate-200 px-3.5 py-1.5 text-sm font-medium text-slate-500">
+            Not diagnosed
+          </span>
+        )}
       </div>
 
       {/* Target companies */}
@@ -156,6 +170,12 @@ export default async function StudentPage({ params }: { params: { id: string } }
         <div className="space-y-6 lg:col-span-2">
           {/* Diagnosis: radar + bars */}
           <Card title={`Gap profile — ${ROLE_LABELS[role]}`}>
+            {!diagnosed ? (
+              <p className="text-sm text-slate-400">
+                Not diagnosed yet — run the diagnosis below to score the six competencies and set
+                the baseline tier.
+              </p>
+            ) : (
             <div className="grid gap-6 sm:grid-cols-[220px_1fr] sm:items-center">
               <Radar items={radarItems} />
               <div className="space-y-3">
@@ -182,6 +202,7 @@ export default async function StudentPage({ params }: { params: { id: string } }
                 })}
               </div>
             </div>
+            )}
           </Card>
 
           {/* RAG movement */}
@@ -364,9 +385,16 @@ export default async function StudentPage({ params }: { params: { id: string } }
             </Detail>
           </Card>
 
-          {/* Re-diagnose */}
-          <Card title="Re-diagnose (creates movement)">
-            <Detail label="Run a re-diagnosis">
+          {/* Diagnosis */}
+          <Card title="Diagnosis">
+            <p className="mb-3 text-sm text-slate-500">
+              {diagnosed
+                ? `Last diagnosed ${new Date(snap.snapshot_at).toLocaleDateString()} · ${snaps.length} snapshot${
+                    snaps.length === 1 ? "" : "s"
+                  }. Running a new diagnosis (e.g. the 3-month re-check) adds a dated snapshot — the Red → Yellow movement then shows here and on the Dean view.`
+                : "Not diagnosed yet. Run the first diagnosis once the student has completed the exercise — it sets their baseline tier and generates their prescriptions."}
+            </p>
+            <Detail label={diagnosed ? "Run a re-diagnosis" : "Run first diagnosis"}>
               <form action={reDiagnose} className="mt-3 space-y-4">
                 <input type="hidden" name="student_id" value={id} />
                 <input type="hidden" name="role" value={role} />
@@ -397,7 +425,7 @@ export default async function StudentPage({ params }: { params: { id: string } }
                     </div>
                   ))}
                 </div>
-                <SaveButton label="Save new diagnosis" />
+                <SaveButton label="Save diagnosis" />
               </form>
             </Detail>
           </Card>
