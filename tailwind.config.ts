@@ -1,31 +1,38 @@
 import type { Config } from "tailwindcss";
 
-// HSB-inspired design system. Navy/blue carry the brand; slate neutrals and
-// emerald/amber/rose tiers keep it clean and modern.
+// MBB exec aesthetic: warm paper canvas, ink + a single deep-blue accent,
+// serif headlines over Inter body. Muted, authoritative, data-forward.
 const config: Config = {
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
+        // token names kept stable; values re-skinned
         hsb: {
-          navy: "#1B335F", // deepened for contrast
-          blue: "#1955A6",
-          "blue-700": "#17478C",
-          tint: "#EEF3FB", // subtle brand surface
-          soft: "#A3C5E9",
-          ink: "#0F172A",
+          navy: "#1B2430", // ink — headlines & primary text
+          blue: "#0E4C7E", // restrained accent
+          "blue-700": "#0B3A61",
+          tint: "#F0EDE6", // warm sand surface for chips
+          soft: "#CBB994", // muted brass hairline accent
+          ink: "#141A22",
+        },
+        paper: "#FBF9F4", // warm off-white canvas
+        rag: {
+          green: "#3B7A57",
+          "green-soft": "#E7EFE8",
+          amber: "#B07D2B",
+          "amber-soft": "#F3EBDA",
+          red: "#A6474A",
+          "red-soft": "#F1E3E1",
         },
       },
       fontFamily: {
-        sans: ["var(--font-lexend)", "Lexend", "ui-sans-serif", "system-ui", "sans-serif"],
-        display: ["var(--font-lexend)", "Lexend", "ui-sans-serif", "sans-serif"],
+        sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+        display: ["'Source Serif 4'", "Georgia", "Cambria", "serif"],
       },
       boxShadow: {
-        card: "0 1px 2px 0 rgba(16,24,40,0.04), 0 1px 3px 0 rgba(16,24,40,0.05)",
-        soft: "0 8px 24px -8px rgba(16,24,40,0.12)",
-      },
-      borderRadius: {
-        "2xl": "1rem",
+        card: "0 1px 2px 0 rgba(20,26,34,0.04)",
+        soft: "0 6px 20px -8px rgba(20,26,34,0.14)",
       },
     },
   },

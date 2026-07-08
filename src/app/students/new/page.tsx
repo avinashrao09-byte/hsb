@@ -20,7 +20,7 @@ export default function NewStudentPage() {
         </p>
       </div>
       {!isConfigured() ? (
-        <div className="mb-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+        <div className="mb-6 rounded-md border border-rag-amber/30 bg-rag-amber-soft px-4 py-3 text-sm text-rag-amber">
           Supabase isn&apos;t connected yet — submitting will fail until you set{" "}
           <code className="rounded bg-white px-1">.env.local</code>. See the README.
         </div>

@@ -8,9 +8,9 @@ import type { Tier } from "@/lib/types";
 export const dynamic = "force-dynamic";
 
 const COLUMNS: { key: Tier | "unrated"; label: string; head: string }[] = [
-  { key: "green", label: "Green", head: "bg-emerald-500" },
-  { key: "yellow", label: "Yellow", head: "bg-amber-500" },
-  { key: "red", label: "Red", head: "bg-rose-500" },
+  { key: "green", label: "Green", head: "bg-rag-green" },
+  { key: "yellow", label: "Yellow", head: "bg-rag-amber" },
+  { key: "red", label: "Red", head: "bg-rag-red" },
   { key: "unrated", label: "Not diagnosed", head: "bg-slate-300" },
 ];
 
@@ -45,7 +45,7 @@ export default async function BoardPage() {
         {COLUMNS.map((col) => {
           const items = byCol[col.key];
           return (
-            <div key={col.key} className="rounded-2xl border border-slate-200 bg-slate-50/60 p-3">
+            <div key={col.key} className="rounded-md border border-slate-200 bg-slate-50/60 p-3">
               <div className="mb-3 flex items-center justify-between px-1">
                 <div className="flex items-center gap-2">
                   <span className={`h-2 w-2 rounded-full ${col.head}`} />
@@ -79,7 +79,7 @@ function StudentCard({ s }: { s: EnrichedStudent }) {
   return (
     <Link
       href={`/students/${s.id}`}
-      className="block rounded-xl border border-slate-200 bg-white p-3.5 shadow-card transition hover:border-hsb-soft hover:shadow-soft"
+      className="block rounded-xl border border-slate-200 bg-white p-3.5 transition hover:border-hsb-soft hover:shadow-soft"
     >
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
@@ -116,7 +116,7 @@ function StudentCard({ s }: { s: EnrichedStudent }) {
           {s.next_check_in_on ? (
             <span
               className={
-                new Date(s.next_check_in_on) < new Date() ? "font-medium text-rose-500" : ""
+                new Date(s.next_check_in_on) < new Date() ? "font-medium text-rag-red" : ""
               }
             >
               Next: {s.next_check_in_on}
@@ -125,7 +125,7 @@ function StudentCard({ s }: { s: EnrichedStudent }) {
             "No check-in set"
           )}
         </span>
-        {s.signatureFloor ? <span className="text-rose-400">◆ floor</span> : null}
+        {s.signatureFloor ? <span className="text-rag-red">◆ floor</span> : null}
       </div>
 
       {s.flags && s.flags.length ? (
@@ -133,7 +133,7 @@ function StudentCard({ s }: { s: EnrichedStudent }) {
           {s.flags.map((f) => (
             <span
               key={f}
-              className="rounded-md bg-rose-50 px-1.5 py-0.5 text-[10px] font-medium text-rose-600"
+              className="rounded-md bg-rag-red-soft px-1.5 py-0.5 text-[10px] font-medium text-rag-red"
             >
               {f}
             </span>

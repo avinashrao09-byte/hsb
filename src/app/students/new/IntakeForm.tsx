@@ -49,7 +49,7 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card">
+    <section className="rounded-md border border-slate-200 bg-white p-6">
       <div className="mb-5 flex items-start gap-3">
         <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-hsb-tint text-xs font-semibold text-hsb-navy">
           {n}

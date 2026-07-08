@@ -57,13 +57,13 @@ export default async function DeanPage() {
       {/* KPI row */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <Kpi label="Readiness index" value={`${readinessIndex}%`} sub="avg across diagnosed" accent="text-hsb-navy" />
-        <Kpi label="Moved up a tier" value={`${movers}`} sub="since intake" accent="text-emerald-600" />
-        <Kpi label="At risk" value={`${atRisk}`} sub="Red / low-coach / overdue" accent="text-rose-600" />
+        <Kpi label="Moved up a tier" value={`${movers}`} sub="since intake" accent="text-rag-green" />
+        <Kpi label="At risk" value={`${atRisk}`} sub="Red / low-coach / overdue" accent="text-rag-red" />
         <Kpi label="Enrolled" value={`${total}`} sub={`of ${FULL_COHORT} full cohort`} accent="text-slate-900" />
       </div>
 
       {/* Intake vs now */}
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card">
+      <div className="rounded-md border border-slate-200 bg-white p-6">
         <h2 className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
           RAG distribution — intake vs now
         </h2>
@@ -78,7 +78,7 @@ export default async function DeanPage() {
       </div>
 
       {/* Task completion by segment */}
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card">
+      <div className="rounded-md border border-slate-200 bg-white p-6">
         <h2 className="mb-5 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
           Task completion by segment
         </h2>
@@ -92,10 +92,10 @@ export default async function DeanPage() {
                 <div
                   className={`h-full rounded-full ${
                     s.tier === "green"
-                      ? "bg-emerald-500"
+                      ? "bg-rag-green"
                       : s.tier === "yellow"
-                      ? "bg-amber-500"
-                      : "bg-rose-500"
+                      ? "bg-rag-amber"
+                      : "bg-rag-red"
                   }`}
                   style={{ width: `${s.pct ?? 0}%` }}
                 />
@@ -128,7 +128,7 @@ function Kpi({
   accent: string;
 }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-card">
+    <div className="rounded-md border border-slate-200 bg-white p-5">
       <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
         {label}
       </div>
@@ -152,9 +152,9 @@ function DistRow({ label, counts, total }: { label: string; counts: Counts; tota
         </span>
       </div>
       <div className="flex h-3 w-full overflow-hidden rounded-full bg-slate-100">
-        <div className="bg-emerald-500" style={{ width: seg(counts.green) }} />
-        <div className="bg-amber-500" style={{ width: seg(counts.yellow) }} />
-        <div className="bg-rose-500" style={{ width: seg(counts.red) }} />
+        <div className="bg-rag-green" style={{ width: seg(counts.green) }} />
+        <div className="bg-rag-amber" style={{ width: seg(counts.yellow) }} />
+        <div className="bg-rag-red" style={{ width: seg(counts.red) }} />
         <div className="bg-slate-200" style={{ width: seg(counts.unrated) }} />
       </div>
     </div>
@@ -164,9 +164,9 @@ function DistRow({ label, counts, total }: { label: string; counts: Counts; tota
 function Legend() {
   return (
     <div className="mt-4 flex flex-wrap gap-x-5 gap-y-1 text-xs text-slate-500">
-      <Item dot="bg-emerald-500" label="Green" />
-      <Item dot="bg-amber-500" label="Yellow" />
-      <Item dot="bg-rose-500" label="Red" />
+      <Item dot="bg-rag-green" label="Green" />
+      <Item dot="bg-rag-amber" label="Yellow" />
+      <Item dot="bg-rag-red" label="Red" />
       <Item dot="bg-slate-300" label="Not diagnosed" />
     </div>
   );

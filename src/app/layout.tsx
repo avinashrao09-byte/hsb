@@ -29,61 +29,44 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className="font-sans text-slate-800">
-        <header className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/80 backdrop-blur">
+      <body className="font-sans text-slate-700">
+        <header className="border-b border-slate-200 bg-paper/90 backdrop-blur">
           <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-            <Link href="/" className="group flex items-center gap-2.5">
-              <span className="grid h-8 w-8 place-items-center rounded-lg bg-hsb-navy text-sm font-bold text-white shadow-sm">
-                H
+            <Link href="/" className="flex items-baseline gap-2.5">
+              <span className="font-display text-xl font-semibold tracking-tight text-hsb-navy">
+                HSB
               </span>
-              <span className="flex items-baseline gap-1.5">
-                <span className="font-display text-[15px] font-semibold tracking-tight text-hsb-navy">
-                  HSB
-                </span>
-                <span className="text-[13px] font-medium text-slate-400">Career Readiness</span>
+              <span className="h-4 w-px translate-y-0.5 bg-slate-300" />
+              <span className="text-[13px] font-medium tracking-wide text-slate-500">
+                Career Readiness
               </span>
             </Link>
 
             {email ? (
               <nav className="flex items-center gap-1">
-                <Link
-                  href="/"
-                  className="rounded-lg px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
-                >
-                  Dashboard
-                </Link>
-                <Link
-                  href="/board"
-                  className="rounded-lg px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
-                >
-                  Board
-                </Link>
-                <Link
-                  href="/dean"
-                  className="rounded-lg px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
-                >
-                  Dean
-                </Link>
+                <NavLink href="/">Dashboard</NavLink>
+                <NavLink href="/board">Board</NavLink>
+                <NavLink href="/dean">Dean</NavLink>
                 <Link
                   href="/students/new"
-                  className="ml-1 inline-flex items-center gap-1.5 rounded-lg bg-hsb-blue px-3.5 py-1.5 text-sm font-semibold text-white shadow-sm transition hover:bg-hsb-blue-700 focus:outline-none focus:ring-2 focus:ring-hsb-blue/40"
+                  className="ml-2 inline-flex items-center gap-1.5 rounded-md bg-hsb-navy px-3.5 py-1.5 text-sm font-medium text-white transition hover:bg-black focus:outline-none focus:ring-2 focus:ring-hsb-navy/30"
                 >
-                  <span className="text-base leading-none">+</span> Enroll
+                  Enroll
                 </Link>
                 <div className="mx-2 h-6 w-px bg-slate-200" />
                 <div className="flex items-center gap-2.5">
-                  <span className="grid h-8 w-8 place-items-center rounded-full bg-hsb-tint text-xs font-semibold text-hsb-navy">
+                  <span className="grid h-8 w-8 place-items-center rounded-full border border-slate-300 text-[11px] font-semibold text-slate-600">
                     {initials(email)}
                   </span>
                   <span className="hidden text-sm text-slate-500 md:inline">{email}</span>
                   <form action={signOut}>
                     <button
                       type="submit"
-                      className="rounded-lg px-2.5 py-1.5 text-sm font-medium text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+                      className="rounded-md px-2.5 py-1.5 text-sm font-medium text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
                     >
                       Sign out
                     </button>
@@ -96,5 +79,16 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <main className="mx-auto max-w-6xl px-6 py-10">{children}</main>
       </body>
     </html>
+  );
+}
+
+function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <Link
+      href={href}
+      className="rounded-md px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-hsb-navy"
+    >
+      {children}
+    </Link>
   );
 }

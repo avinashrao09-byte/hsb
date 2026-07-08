@@ -84,7 +84,7 @@ export default async function StudentPage({ params }: { params: { id: string } }
       </Link>
 
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-card">
+      <div className="flex flex-wrap items-center justify-between gap-6 rounded-md border border-slate-200 bg-white p-6">
         <div className="flex items-center gap-4">
           <span className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-hsb-tint text-lg font-semibold text-hsb-navy">
             {student.full_name.slice(0, 2).toUpperCase()}
@@ -116,7 +116,7 @@ export default async function StudentPage({ params }: { params: { id: string } }
             </span>
             <div className="mt-1.5 text-xs text-slate-500">
               <span className="font-semibold text-slate-700">{snap.hard_readiness_pct}%</span> ready
-              {snap.signature_floor_fired ? <span className="ml-1 text-rose-500">· floor</span> : null}
+              {snap.signature_floor_fired ? <span className="ml-1 text-rag-red">· floor</span> : null}
             </div>
           </div>
         ) : null}
@@ -161,7 +161,7 @@ export default async function StudentPage({ params }: { params: { id: string } }
               <div className="space-y-3">
                 {radarItems.map((it, i) => {
                   const meetsTarget = it.value >= it.target;
-                  const barColor = meetsTarget ? "bg-emerald-500" : it.signature ? "bg-rose-500" : "bg-amber-500";
+                  const barColor = meetsTarget ? "bg-rag-green" : it.signature ? "bg-rag-red" : "bg-rag-amber";
                   return (
                     <div key={i} className="flex items-center gap-2.5">
                       <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-slate-100 text-[10px] font-semibold text-slate-500">
@@ -338,9 +338,9 @@ export default async function StudentPage({ params }: { params: { id: string } }
             <div className="space-y-2">
               {(hardConvos ?? []).length ? (
                 (hardConvos as any[]).map((h) => (
-                  <div key={h.id} className="rounded-xl border border-rose-100 bg-rose-50/40 px-3.5 py-2.5">
+                  <div key={h.id} className="rounded-xl border border-rag-red/20 bg-rag-red-soft/50 px-3.5 py-2.5">
                     <div className="flex items-center justify-between text-xs text-slate-500">
-                      <span className="font-medium text-rose-700">Captured</span>
+                      <span className="font-medium text-rag-red">Captured</span>
                       <span>{h.occurred_on}</span>
                     </div>
                     <p className="mt-1 text-sm text-slate-700">{h.summary}</p>
@@ -484,7 +484,7 @@ export default async function StudentPage({ params }: { params: { id: string } }
 
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card">
+    <div className="rounded-md border border-slate-200 bg-white p-6">
       <h2 className="mb-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500">{title}</h2>
       {children}
     </div>
@@ -586,8 +586,8 @@ function Radar({
         const [x, y] = pt(i, 3);
         return <line key={i} x1={cx} y1={cy} x2={x} y2={y} stroke="#e2e8f0" strokeWidth="1" />;
       })}
-      <polygon points={targetPoly} fill="none" stroke="#94a3b8" strokeWidth="1.5" strokeDasharray="3 3" />
-      <polygon points={valuePoly} fill="rgba(25,85,166,0.15)" stroke="#1955A6" strokeWidth="2" />
+      <polygon points={targetPoly} fill="none" stroke="#a8a29e" strokeWidth="1.5" strokeDasharray="3 3" />
+      <polygon points={valuePoly} fill="rgba(14,76,126,0.12)" stroke="#0E4C7E" strokeWidth="2" />
       {items.map((_, i) => {
         const [x, y] = pt(i, 3.42);
         return (

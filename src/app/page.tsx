@@ -24,21 +24,21 @@ type SnapRow = {
 const TIER_META: Record<Tier, { label: string; dot: string; pill: string; bar: string }> = {
   green: {
     label: "Green",
-    dot: "bg-emerald-500",
-    pill: "bg-emerald-50 text-emerald-700 ring-emerald-200",
-    bar: "bg-emerald-500",
+    dot: "bg-rag-green",
+    pill: "bg-rag-green-soft text-rag-green ring-rag-green/30",
+    bar: "bg-rag-green",
   },
   yellow: {
     label: "Yellow",
-    dot: "bg-amber-500",
-    pill: "bg-amber-50 text-amber-700 ring-amber-200",
-    bar: "bg-amber-500",
+    dot: "bg-rag-amber",
+    pill: "bg-rag-amber-soft text-rag-amber ring-rag-amber/30",
+    bar: "bg-rag-amber",
   },
   red: {
     label: "Red",
-    dot: "bg-rose-500",
-    pill: "bg-rose-50 text-rose-700 ring-rose-200",
-    bar: "bg-rose-500",
+    dot: "bg-rag-red",
+    pill: "bg-rag-red-soft text-rag-red ring-rag-red/30",
+    bar: "bg-rag-red",
   },
 };
 
@@ -92,16 +92,16 @@ export default async function Dashboard() {
       {total > 0 ? <DistributionBar counts={counts} total={total} /> : null}
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <Stat label="Green" value={counts.green} total={total} dot="bg-emerald-500" />
-        <Stat label="Yellow" value={counts.yellow} total={total} dot="bg-amber-500" />
-        <Stat label="Red" value={counts.red} total={total} dot="bg-rose-500" />
+        <Stat label="Green" value={counts.green} total={total} dot="bg-rag-green" />
+        <Stat label="Yellow" value={counts.yellow} total={total} dot="bg-rag-amber" />
+        <Stat label="Red" value={counts.red} total={total} dot="bg-rag-red" />
         <Stat label="Not diagnosed" value={counts.unrated} total={total} dot="bg-slate-300" />
       </div>
 
       {total === 0 ? (
         <EmptyState />
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-card">
+        <div className="overflow-hidden rounded-md border border-slate-200 bg-white">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-slate-100 bg-slate-50/70 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500">
@@ -196,17 +196,17 @@ function DistributionBar({
 }) {
   const seg = (n: number) => `${(n / total) * 100}%`;
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-card">
+    <div className="rounded-md border border-slate-200 bg-white p-5">
       <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-slate-100">
-        <div className="bg-emerald-500" style={{ width: seg(counts.green) }} />
-        <div className="bg-amber-500" style={{ width: seg(counts.yellow) }} />
-        <div className="bg-rose-500" style={{ width: seg(counts.red) }} />
+        <div className="bg-rag-green" style={{ width: seg(counts.green) }} />
+        <div className="bg-rag-amber" style={{ width: seg(counts.yellow) }} />
+        <div className="bg-rag-red" style={{ width: seg(counts.red) }} />
         <div className="bg-slate-200" style={{ width: seg(counts.unrated) }} />
       </div>
       <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-xs text-slate-500">
-        <Legend dot="bg-emerald-500" label="Green" n={counts.green} />
-        <Legend dot="bg-amber-500" label="Yellow" n={counts.yellow} />
-        <Legend dot="bg-rose-500" label="Red" n={counts.red} />
+        <Legend dot="bg-rag-green" label="Green" n={counts.green} />
+        <Legend dot="bg-rag-amber" label="Yellow" n={counts.yellow} />
+        <Legend dot="bg-rag-red" label="Red" n={counts.red} />
         <Legend dot="bg-slate-300" label="Not diagnosed" n={counts.unrated} />
       </div>
     </div>
@@ -234,7 +234,7 @@ function Stat({
   dot: string;
 }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-card">
+    <div className="rounded-md border border-slate-200 bg-white p-5">
       <div className="flex items-center gap-2">
         <span className={`h-2 w-2 rounded-full ${dot}`} />
         <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
@@ -253,7 +253,7 @@ function Stat({
 
 function EmptyState() {
   return (
-    <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-14 text-center">
+    <div className="rounded-md border border-dashed border-slate-300 bg-white p-14 text-center">
       <div className="mx-auto mb-4 grid h-12 w-12 place-items-center rounded-full bg-hsb-tint text-hsb-navy">
         <span className="text-xl">+</span>
       </div>
@@ -271,7 +271,7 @@ function EmptyState() {
 
 function ConnectPrompt() {
   return (
-    <div className="rounded-2xl border border-hsb-soft/60 bg-hsb-tint p-8">
+    <div className="rounded-md border border-hsb-soft/60 bg-hsb-tint p-8">
       <h1 className="font-display text-xl font-semibold text-hsb-navy">Connect Supabase to begin</h1>
       <p className="mt-2 max-w-2xl text-sm text-hsb-navy/80">
         Copy <code className="rounded bg-white px-1 py-0.5">.env.example</code> to{" "}

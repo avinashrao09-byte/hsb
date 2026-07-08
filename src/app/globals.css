@@ -13,11 +13,12 @@ body {
 }
 
 body {
-  background: #f8fafc; /* slate-50 */
-  color: #1e293b; /* slate-800 */
+  background: #fbf9f4; /* warm paper */
+  color: #2b3440; /* ink-slate */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  font-feature-settings: "ss01", "cv01";
 }
 
 * {
@@ -25,10 +26,15 @@ body {
 }
 
 ::selection {
-  background: rgba(25, 85, 166, 0.16);
+  background: rgba(14, 76, 126, 0.14);
 }
 
-/* Tidy native selects to match the design language */
+/* tabular numerals everywhere numbers matter reads more "exec" */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* refined native selects */
 select {
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
