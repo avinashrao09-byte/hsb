@@ -19,7 +19,7 @@ export async function addCheckIn(formData: FormData) {
   const id = str(formData.get("student_id"));
   const payload: Record<string, unknown> = {
     student_id: id,
-    phase: str(formData.get("phase")) || "build",
+    phase: str(formData.get("phase")) || "skill_building",
     task_progress: formData.get("task_progress") ? Number(formData.get("task_progress")) : null,
     deliverable_quality: str(formData.get("deliverable_quality"))
       ? lvl(formData.get("deliverable_quality"))

@@ -29,7 +29,7 @@ export async function enrollStudent(formData: FormData) {
       email: String(formData.get("email") ?? "") || null,
       cohort: String(formData.get("cohort") ?? "") || null,
       track,
-      phase: "orient",
+      phase: "onboarding",
     })
     .select("id")
     .single();

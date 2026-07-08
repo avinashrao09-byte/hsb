@@ -142,7 +142,7 @@ export default async function Dashboard() {
                     </td>
                     <td className="px-5 py-3.5">
                       <span className="inline-flex rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium capitalize text-slate-600">
-                        {st.phase}
+                        {st.phase.replace(/_/g, " ")}
                       </span>
                     </td>
                     <td className="px-5 py-3.5">

@@ -15,7 +15,7 @@ import {
 
 export const dynamic = "force-dynamic";
 
-const PHASES = ["orient", "build", "position", "internship", "recalibrate", "convert", "launch"];
+const PHASES = ["onboarding", "skill_building", "internship_prep", "internship", "job_search", "placed"];
 const LEVELS = [0, 1, 2, 3];
 const input =
   "w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:border-hsb-blue focus:outline-none focus:ring-2 focus:ring-hsb-blue/20";
@@ -109,7 +109,7 @@ export default async function StudentPage({ params }: { params: { id: string } }
               <span>Target: {ROLE_LABELS[role]}</span>
               <span className="text-slate-300">•</span>
               <span className="inline-flex rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium capitalize text-slate-600">
-                {student.phase}
+                {student.phase.replace(/_/g, " ")}
               </span>
               {coach ? (
                 <span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ring-1 ${coach.pill}`}>
@@ -245,7 +245,7 @@ export default async function StudentPage({ params }: { params: { id: string } }
                         : "bg-white text-slate-500 ring-slate-200"
                     }`}
                   >
-                    {p}
+                    {p.replace(/_/g, " ")}
                   </li>
                 );
               })}
@@ -310,7 +310,7 @@ export default async function StudentPage({ params }: { params: { id: string } }
                 (checkins as any[]).map((ci) => (
                   <div key={ci.id} className="rounded-xl border border-slate-100 bg-slate-50/50 px-3.5 py-2.5">
                     <div className="flex items-center justify-between text-xs text-slate-500">
-                      <span className="font-medium capitalize text-slate-700">{ci.phase}</span>
+                      <span className="font-medium capitalize text-slate-700">{ci.phase.replace(/_/g, " ")}</span>
                       <span>{ci.occurred_on}</span>
                     </div>
                     <div className="mt-1 flex flex-wrap gap-x-4 gap-y-0.5 text-xs text-slate-500">
@@ -494,7 +494,7 @@ export default async function StudentPage({ params }: { params: { id: string } }
                 <input
                   name="flags"
                   className={input}
-                  placeholder="coachability gate triggered, resistant to feedback"
+                  placeholder="Coaching needed, at risk of no offer"
                   defaultValue={(student.flags ?? []).join(", ")}
                 />
               </Labeled>
