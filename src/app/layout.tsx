@@ -49,12 +49,24 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </Link>
 
             {email ? (
-              <nav className="flex items-center gap-1.5">
+              <nav className="flex items-center gap-1">
                 <Link
                   href="/"
                   className="rounded-lg px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
                 >
                   Dashboard
+                </Link>
+                <Link
+                  href="/board"
+                  className="rounded-lg px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+                >
+                  Board
+                </Link>
+                <Link
+                  href="/dean"
+                  className="rounded-lg px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+                >
+                  Dean
                 </Link>
                 <Link
                   href="/students/new"
