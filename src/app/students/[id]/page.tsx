@@ -100,8 +100,9 @@ export default async function StudentPage({ params }: { params: { id: string } }
             {student.full_name.slice(0, 2).toUpperCase()}
           </span>
           <div>
-            <h1 className="font-display text-2xl font-semibold tracking-tight text-hsb-navy">
+            <h1 className="flex items-center gap-2 font-display text-2xl font-semibold tracking-tight text-hsb-navy">
               {student.full_name}
+              {student.cohort === "MBA 2026 (demo)" ? <IllustrativeTag /> : null}
             </h1>
             <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-slate-500">
               <span>{TRACK_LABELS[student.track] ?? student.track}</span>
@@ -625,5 +626,14 @@ function Radar({
         );
       })}
     </svg>
+  );
+}
+
+
+function IllustrativeTag() {
+  return (
+    <span className="shrink-0 rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-slate-500 ring-1 ring-slate-200">
+      Illustrative
+    </span>
   );
 }

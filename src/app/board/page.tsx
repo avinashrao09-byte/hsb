@@ -83,7 +83,10 @@ function StudentCard({ s }: { s: EnrichedStudent }) {
     >
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <div className="truncate text-sm font-semibold text-slate-900">{s.full_name}</div>
+          <div className="flex items-center gap-1.5">
+            <span className="truncate text-sm font-semibold text-slate-900">{s.full_name}</span>
+            {s.cohort === "MBA 2026 (demo)" ? <IllustrativeTag /> : null}
+          </div>
           <div className="truncate text-xs text-slate-500">
             {s.role ? ROLE_LABELS[s.role] : "—"}
           </div>
@@ -141,5 +144,14 @@ function StudentCard({ s }: { s: EnrichedStudent }) {
         </div>
       ) : null}
     </Link>
+  );
+}
+
+
+function IllustrativeTag() {
+  return (
+    <span className="shrink-0 rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-slate-500 ring-1 ring-slate-200">
+      Illustrative
+    </span>
   );
 }

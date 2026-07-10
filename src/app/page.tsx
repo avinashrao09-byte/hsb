@@ -125,8 +125,9 @@ export default async function Dashboard() {
                           {st.full_name.slice(0, 2).toUpperCase()}
                         </span>
                         <span>
-                          <span className="block font-medium text-slate-900 group-hover:text-hsb-blue">
+                          <span className="flex items-center gap-1.5 font-medium text-slate-900 group-hover:text-hsb-blue">
                             {st.full_name}
+                            {st.cohort === "MBA 2026 (demo)" ? <IllustrativeTag /> : null}
                           </span>
                           {st.cohort ? (
                             <span className="block text-xs text-slate-400">{st.cohort}</span>
@@ -279,5 +280,14 @@ function ConnectPrompt() {
         anon key, run the migrations, then <code className="rounded bg-white px-1 py-0.5">npm run seed</code>. See the README.
       </p>
     </div>
+  );
+}
+
+
+function IllustrativeTag() {
+  return (
+    <span className="shrink-0 rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-slate-500 ring-1 ring-slate-200">
+      Illustrative
+    </span>
   );
 }
