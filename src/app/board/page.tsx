@@ -14,13 +14,21 @@ const COLUMNS: { key: Tier | "unrated"; label: string; head: string }[] = [
   { key: "unrated", label: "Not diagnosed", head: "bg-slate-300" },
 ];
 
-export default async function BoardPage() {
+export default async function BoardPage({
+  searchParams,
+}: {
+  searchParams: { by?: string };
+}) {
   if (!isConfigured())
     return <p className="text-sm text-slate-500">Connect Supabase first.</p>;
 
+  const by = searchParams?.by === "fow" ? "fow" : "role";
   const cohort = await getCohort();
   const byCol: Record<string, EnrichedStudent[]> = { green: [], yellow: [], red: [], unrated: [] };
-  for (const s of cohort) byCol[s.tier ?? "unrated"].push(s);
+  for (const s of cohort) {
+    const key = by === "fow" ? s.fowTier : s.tier;
+    byCol[key ?? "unrated"].push(s);
+  }
 
   return (
     <div className="space-y-6">
@@ -30,15 +38,36 @@ export default async function BoardPage() {
             Dashboard
           </h1>
           <p className="mt-1 text-sm text-slate-500">
-            {cohort.length} student{cohort.length === 1 ? "" : "s"} · sorted by readiness tier
+            {cohort.length} student{cohort.length === 1 ? "" : "s"} · columns by{" "}
+            {by === "fow" ? "Future of Work readiness" : "role fitment"}
           </p>
         </div>
-        <Link
-          href="/students/new"
-          className="inline-flex items-center gap-1.5 rounded-lg bg-hsb-blue px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-hsb-blue-700"
-        >
-          <span className="text-base leading-none">+</span> Enroll student
-        </Link>
+        <div className="flex items-center gap-3">
+          <div className="inline-flex rounded-lg border border-slate-200 bg-white p-0.5 text-xs font-medium">
+            <Link
+              href="/board"
+              className={`rounded-md px-3 py-1.5 transition ${
+                by === "role" ? "bg-hsb-navy text-white" : "text-slate-500 hover:text-hsb-navy"
+              }`}
+            >
+              Role fitment
+            </Link>
+            <Link
+              href="/board?by=fow"
+              className={`rounded-md px-3 py-1.5 transition ${
+                by === "fow" ? "bg-hsb-navy text-white" : "text-slate-500 hover:text-hsb-navy"
+              }`}
+            >
+              Future of Work
+            </Link>
+          </div>
+          <Link
+            href="/students/new"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-hsb-blue px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-hsb-blue-700"
+          >
+            <span className="text-base leading-none">+</span> Enroll student
+          </Link>
+        </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -49,7 +78,9 @@ export default async function BoardPage() {
               <div className="mb-3 flex items-center justify-between px-1">
                 <div className="flex items-center gap-2">
                   <span className={`h-2 w-2 rounded-full ${col.head}`} />
-                  <span className="text-sm font-semibold text-slate-700">{col.label}</span>
+                  <span className="text-sm font-semibold text-slate-700">
+                    {col.key === "unrated" ? (by === "fow" ? "Not assessed" : "Not diagnosed") : col.label}
+                  </span>
                 </div>
                 <span className="rounded-full bg-white px-2 py-0.5 text-xs font-medium text-slate-500 ring-1 ring-slate-200">
                   {items.length}
@@ -78,7 +109,7 @@ function StudentCard({ s }: { s: EnrichedStudent }) {
 
   return (
     <Link
-      href={`/students/${s.id}`}
+      href={`/students/${s.id}/summary`}
       className="block rounded-xl border border-slate-200 bg-white p-3.5 transition hover:border-hsb-soft hover:shadow-soft"
     >
       <div className="flex items-start justify-between gap-2">
@@ -98,6 +129,11 @@ function StudentCard({ s }: { s: EnrichedStudent }) {
             {coach.label}
           </span>
         ) : null}
+      </div>
+
+      <div className="mt-2.5 flex items-center gap-1.5">
+        <TierChip label="Role" tier={s.tier} />
+        <TierChip label="FoW" tier={s.fowTier} naLabel="n/a" />
       </div>
 
       {pct != null ? (
@@ -152,6 +188,25 @@ function IllustrativeTag() {
   return (
     <span className="shrink-0 rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-slate-500 ring-1 ring-slate-200">
       Illustrative
+    </span>
+  );
+}
+
+function TierChip({
+  label,
+  tier,
+  naLabel = "—",
+}: {
+  label: string;
+  tier: Tier | null;
+  naLabel?: string;
+}) {
+  const meta = tier ? TIER_META[tier] : null;
+  return (
+    <span className="inline-flex items-center gap-1 rounded-md border border-slate-200 px-1.5 py-0.5 text-[10px] font-medium text-slate-500">
+      {label}
+      <span className={`h-1.5 w-1.5 rounded-full ${meta ? meta.dot : "bg-slate-300"}`} />
+      <span className="text-slate-400">{meta ? meta.label : naLabel}</span>
     </span>
   );
 }

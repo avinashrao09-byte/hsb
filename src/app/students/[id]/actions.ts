@@ -192,6 +192,20 @@ export async function reDiagnose(formData: FormData) {
     tier: result.tier,
     signature_floor_fired: result.signatureFloorFired,
   });
+  await supabase.from("exercise_snapshot").insert({
+    student_id: id,
+    role,
+    deliverable_url: str(formData.get("deliverable_url")) || null,
+    deliverable_problem: str(formData.get("deliverable_problem")) || null,
+    deliverable_target: str(formData.get("deliverable_target")) || null,
+    deliverable_quality: str(formData.get("deliverable_quality")) ? lvl(formData.get("deliverable_quality")) : null,
+    deliverable_authorship: str(formData.get("deliverable_authorship")) ? lvl(formData.get("deliverable_authorship")) : null,
+    communication: str(formData.get("communication")) ? lvl(formData.get("communication")) : null,
+    responsiveness: str(formData.get("responsiveness")) ? lvl(formData.get("responsiveness")) : null,
+    drive: str(formData.get("drive")) ? lvl(formData.get("drive")) : null,
+    game_changer: str(formData.get("game_changer")) || null,
+    assessed_by: "mentor",
+  });
   await supabase.from("audit_log").insert({
     actor: "mentor",
     action: "tier_change",

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient, isConfigured } from "@/lib/supabase/server";
 import { getRoleProfile, ROLE_LABELS, TRACK_LABELS } from "@/lib/roleLibrary";
 import { TIER_META, COACH_META } from "@/lib/tierUi";
+import { FUTURE_WORK_SKILLS } from "@/lib/futureWork";
 import type { Role, Tier } from "@/lib/types";
 import {
   addCheckIn,
@@ -17,6 +18,7 @@ export const dynamic = "force-dynamic";
 
 const PHASES = ["onboarding", "skill_building", "internship_prep", "internship", "job_search", "placed"];
 const LEVELS = [0, 1, 2, 3];
+const AUTHORSHIP = ["AI-only", "Mostly AI", "Human-led, AI-assisted", "Human-driven"];
 const input =
   "w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:border-hsb-blue focus:outline-none focus:ring-2 focus:ring-hsb-blue/20";
 
@@ -44,6 +46,8 @@ export default async function StudentPage({ params }: { params: { id: string } }
     { data: checkins },
     { data: hardConvos },
     { data: roleDecl },
+    { data: exRows },
+    { data: fowRows },
   ] = await Promise.all([
     supabase.from("readiness_snapshot").select("*").eq("student_id", id).order("snapshot_at", { ascending: true }),
     supabase.from("competency_score").select("*").eq("student_id", id).order("scored_at", { ascending: false }),
@@ -62,6 +66,8 @@ export default async function StudentPage({ params }: { params: { id: string } }
       .eq("is_current", true)
       .order("declared_at", { ascending: false })
       .limit(1),
+    supabase.from("exercise_snapshot").select("*").eq("student_id", id).order("snapshot_at", { ascending: false }),
+    supabase.from("future_work_snapshot").select("*").eq("student_id", id).order("snapshot_at", { ascending: false }),
   ]);
 
   const snaps = (snapsAsc ?? []) as any[];
@@ -71,6 +77,8 @@ export default async function StudentPage({ params }: { params: { id: string } }
   const diagnosed = snaps.length > 0;
   const profile = getRoleProfile(role);
   const softA = (soft ?? [])[0];
+  const exA = (exRows ?? [])[0] as any;
+  const fowA = (fowRows ?? [])[0] as any;
   const selfA = (self ?? [])[0];
   const resume = (arts ?? []).find((a: any) => a.kind === "resume");
   const linkedin = (arts ?? []).find((a: any) => a.kind === "linkedin");
@@ -426,9 +434,90 @@ export default async function StudentPage({ params }: { params: { id: string } }
                     </div>
                   ))}
                 </div>
+                <div className="space-y-3 border-t border-slate-100 pt-3">
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                    Deliverable & subjectives
+                  </p>
+                  <Labeled label="Problem chosen">
+                    <textarea name="deliverable_problem" rows={2} className={input} />
+                  </Labeled>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <Labeled label="Aimed at (company)">
+                      <input name="deliverable_target" className={input} />
+                    </Labeled>
+                    <Labeled label="Deliverable URL">
+                      <input name="deliverable_url" className={input} placeholder="https://…" />
+                    </Labeled>
+                  </div>
+                  <div className="grid gap-3 sm:grid-cols-5">
+                    <LabeledSelect name="deliverable_quality" label="Quality" options={LEVELS.map(String)} defaultValue="2" />
+                    <LabeledSelect name="deliverable_authorship" label="Authorship" options={LEVELS.map(String)} defaultValue="2" />
+                    <LabeledSelect name="communication" label="Comms" options={LEVELS.map(String)} defaultValue="2" />
+                    <LabeledSelect name="responsiveness" label="Responsive" options={LEVELS.map(String)} defaultValue="2" />
+                    <LabeledSelect name="drive" label="Drive" options={LEVELS.map(String)} defaultValue="2" />
+                  </div>
+                  <Labeled label="Game changer">
+                    <textarea name="game_changer" rows={2} className={input} />
+                  </Labeled>
+                </div>
                 <SaveButton label="Save diagnosis" />
               </form>
             </Detail>
+          </Card>
+
+          <Card title="Ask exercise">
+            {exA ? (
+              <div className="space-y-3">
+                {exA.deliverable_problem ? <p className="text-sm text-slate-700">{exA.deliverable_problem}</p> : null}
+                <div className="flex flex-wrap gap-x-6 gap-y-1 text-xs text-slate-500">
+                  {exA.deliverable_target ? (
+                    <span>Aimed at <b className="text-slate-700">{exA.deliverable_target}</b></span>
+                  ) : null}
+                  <span>Quality {exA.deliverable_quality ?? "—"}/3</span>
+                  <span>
+                    Authorship{" "}
+                    {exA.deliverable_authorship != null
+                      ? `${exA.deliverable_authorship}/3 (${AUTHORSHIP[exA.deliverable_authorship]})`
+                      : "—"}
+                  </span>
+                  <span>Comms {exA.communication ?? "—"}/3</span>
+                  <span>Responsiveness {exA.responsiveness ?? "—"}/3</span>
+                  <span>Drive {exA.drive ?? "—"}/3</span>
+                </div>
+                {exA.deliverable_url ? (
+                  <a href={exA.deliverable_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-sm font-medium text-hsb-blue hover:underline">
+                    Open deliverable
+                  </a>
+                ) : null}
+                {exA.game_changer ? (
+                  <div className="rounded-lg border border-hsb-soft/50 bg-hsb-tint px-3.5 py-2.5">
+                    <div className="text-[10px] font-semibold uppercase tracking-wider text-hsb-navy/70">Game changer</div>
+                    <p className="mt-1 text-sm text-hsb-navy">{exA.game_changer}</p>
+                  </div>
+                ) : null}
+              </div>
+            ) : (
+              <p className="text-sm text-slate-400">No exercise captured yet.</p>
+            )}
+          </Card>
+
+          <Card title="Future of Work skills">
+            {fowA ? (
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
+                {FUTURE_WORK_SKILLS.map((s) => (
+                  <div key={s.key} className="rounded-lg border border-slate-100 bg-slate-50/60 px-2 py-2 text-center">
+                    <div className="truncate text-[10px] font-medium text-slate-500">{s.name}</div>
+                    <div className="mt-0.5 text-sm font-semibold tabular-nums text-slate-800">
+                      {fowA[s.key] != null ? `${fowA[s.key]}/3` : "—"}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-slate-400">
+                Not yet assessed. Filled by the Future of Work exercise later in the journey.
+              </p>
+            )}
           </Card>
 
           <Card title="Audit log">

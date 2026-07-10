@@ -120,7 +120,7 @@ export default async function Dashboard() {
                 return (
                   <tr key={st.id} className="group transition hover:bg-slate-50/70">
                     <td className="px-5 py-3.5">
-                      <Link href={`/students/${st.id}`} className="flex items-center gap-3">
+                      <Link href={`/students/${st.id}/summary`} className="flex items-center gap-3">
                         <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-hsb-tint text-xs font-semibold text-hsb-navy">
                           {st.full_name.slice(0, 2).toUpperCase()}
                         </span>

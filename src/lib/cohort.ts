@@ -18,6 +18,8 @@ export type EnrichedStudent = {
   intakeReadiness: number | null;
   taskTotal: number;
   taskDone: number;
+  fowTier: Tier | null;
+  fowIndex: number | null;
 };
 
 const TIER_RANK: Record<Tier, number> = { red: 0, yellow: 1, green: 2 };
@@ -43,7 +45,7 @@ export function taskPct(s: EnrichedStudent): number | null {
 
 export async function getCohort(): Promise<EnrichedStudent[]> {
   const supabase = createClient();
-  const [{ data: students }, { data: snaps }, { data: rx }] = await Promise.all([
+  const [{ data: students }, { data: snaps }, { data: rx }, { data: fowRows }] = await Promise.all([
     supabase
       .from("student")
       .select("id,full_name,cohort,track,phase,next_check_in_on,flags")
@@ -53,6 +55,10 @@ export async function getCohort(): Promise<EnrichedStudent[]> {
       .select("student_id,role,tier,hard_readiness_pct,coachability,signature_floor_fired,snapshot_at")
       .order("snapshot_at", { ascending: true }),
     supabase.from("prescription").select("student_id,status"),
+    supabase
+      .from("future_work_snapshot")
+      .select("student_id,fow_tier,fow_index,snapshot_at")
+      .order("snapshot_at", { ascending: true }),
   ]);
 
   const first = new Map<string, any>();
@@ -68,6 +74,9 @@ export async function getCohort(): Promise<EnrichedStudent[]> {
     taskTotal.set(p.student_id, (taskTotal.get(p.student_id) ?? 0) + 1);
     if (p.status === "done") taskDone.set(p.student_id, (taskDone.get(p.student_id) ?? 0) + 1);
   }
+
+  const fowLast = new Map<string, any>();
+  for (const f of (fowRows ?? []) as any[]) fowLast.set(f.student_id, f);
 
   return ((students ?? []) as any[]).map((st) => {
     const l = last.get(st.id);
@@ -89,6 +98,8 @@ export async function getCohort(): Promise<EnrichedStudent[]> {
       intakeReadiness: f?.hard_readiness_pct ?? null,
       taskTotal: taskTotal.get(st.id) ?? 0,
       taskDone: taskDone.get(st.id) ?? 0,
+      fowTier: (fowLast.get(st.id)?.fow_tier ?? null) as Tier | null,
+      fowIndex: fowLast.get(st.id)?.fow_index ?? null,
     } satisfies EnrichedStudent;
   });
 }
