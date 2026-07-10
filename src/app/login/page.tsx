@@ -1,11 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 export default function LoginPage() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -17,13 +15,15 @@ export default function LoginPage() {
     setError(null);
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-    setLoading(false);
     if (error) {
       setError(error.message);
+      setLoading(false);
       return;
     }
-    router.refresh();
-    router.push("/");
+    // Success: keep the button disabled and do a FULL navigation so the
+    // middleware reliably sees the freshly-set auth cookie. router.push() here
+    // raced the cookie write and could silently bounce back to /login.
+    window.location.assign("/");
   }
 
   const field =
@@ -76,14 +76,39 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-lg bg-hsb-blue px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-hsb-blue-700 focus:outline-none focus:ring-2 focus:ring-hsb-blue/40 disabled:opacity-60"
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-hsb-blue px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-hsb-blue-700 focus:outline-none focus:ring-2 focus:ring-hsb-blue/40 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none disabled:hover:bg-slate-200"
         >
-          {loading ? "Signing in…" : "Sign in"}
+          {loading ? (
+            <>
+              <Spinner />
+              Signing in…
+            </>
+          ) : (
+            "Sign in"
+          )}
         </button>
         <p className="text-center text-xs text-slate-400">
           Accounts are provisioned by the program admin. No public sign-up.
         </p>
       </form>
     </div>
+  );
+}
+
+function Spinner() {
+  return (
+    <svg
+      className="h-4 w-4 animate-spin text-current"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+    >
+      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 0 1 8-8V0C5.373 0 0 5.373 0 12h4z"
+      />
+    </svg>
   );
 }
